@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="UTF-8" />
+            <title>Click game</title>
+
+            <style>
+
+                p {
+                    font-size: 1.2rem;
+                }
+
+                h1 {
+                    display: inline;
+                }
+
+                button {
+                    padding: 5px;
+                    font-weight: bold;
+                    margin-top: 50px;
+                    margin-bottom: 35px;
+                }
+
+                #board {
+                    color: green;
+                }
+
+                #status {
+                    font-weight: bold;
+                }
+
+                #status, #msg {
+                    display: inline;
+                    font-size: 1.2rem;
+                }
+
+            </style>
+
+        </head>
+        <body>
+            <div id="game"></div>
+
+            <script>
+                
+                let game = document.getElementById('game')
+                
+                let points = 0
+                let pointsPerClick = 1
+                let upgradeCost = 10
+
+                showGame()
+
+                function showGame() {
+                    game.innerHTML = /*HTML*/`
+                    <h2>Click game 👆</h2>
+                    <p>You start with 1 point per click.</p>
+                    <p>Each upgrade adds an extra point per click.</p>
+                    <br>
+                    <h1>Points: </h1>
+                    <h1 id="board"></h1>
+                    <br>
+                    <button id="play" onclick="playGame()">Click'n play!</button>
+                    <button id="upgrade" onclick="buyUpgrade()">Buy upgrade (10 pts)</button>
+                    <br>
+                    <p id="status">Status: </p>
+                    <p id="msg">${pointsPerClick} point(s) per click</p>
+                    <p id="reload"></p>
+                    `;
+                }
+
+                let scoreBoard = document.getElementById('board')
+                let msg = document.getElementById('msg')
+                let buttons = document.querySelectorAll('#play, #upgrade')
+                let reload = document.getElementById('reload')
+
+                function playGame() {
+                    points = points + pointsPerClick;
+                    scoreBoard.innerHTML = points;
+                    msg.innerHTML = /*HTML*/`
+                        ${pointsPerClick} point(s) per click
+                        `;
+                    if (points >= 1000) {
+                        buttons.forEach(element => {
+                        element.disabled = true;
+                        });
+                        msg.innerHTML = /*HTML*/`
+                        You won! 😄
+                        `;
+                        reload.innerHTML = 'Reload page to play again 👍';
+                    }
+                }
+
+                function buyUpgrade() {
+                    if (points >= upgradeCost) {
+                        points = points - upgradeCost;
+                        pointsPerClick = pointsPerClick +1;
+                        scoreBoard.innerHTML = points;
+                        msg.innerHTML = /*HTML*/`
+                        ${pointsPerClick} point(s) per click
+                        `;
+                    } else {
+                         msg.innerHTML = /*HTML*/ `Not enough points!`;
+                    }
+                }
+
+            </script>
+
+        </body>
+    </html>
